@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "keyed-nonce-tracker"
+version = "0.1.0"
+description = "Monitoring and analytics for EIP-8250 keyed nonce adoption (Glamsterdam upgrade)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Arseniy", email = "arseniy@example.com" },
+]
+keywords = ["ethereum", "eip-8250", "glamsterdam", "monitoring", "analytics"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "aiohttp>=3.9",
+    "pydantic>=2.0",
+    "streamlit>=1.30",
+    "pandas>=2.0",
+    "plotly>=5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/Zergal84/keyed-nonce-tracker"
+Issues = "https://github.com/Zergal84/keyed-nonce-tracker/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
