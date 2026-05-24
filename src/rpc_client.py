@@ -35,16 +35,17 @@ class EthRpcClient:
     """
 
     def __init__(self, rpc_url: str | None = None, timeout_seconds: int = 30) -> None:
-        self._url = rpc_url or os.environ.get("RPC_URL")
-        if not self._url:
+        url = rpc_url or os.environ.get("RPC_URL")
+        if not url:
             raise ValueError(
                 "RPC URL not configured; pass rpc_url=... or set RPC_URL env var"
             )
+        self._url: str = url
         self._timeout = aiohttp.ClientTimeout(total=timeout_seconds)
         self._session: aiohttp.ClientSession | None = None
         self._req_id = 0
 
-    async def __aenter__(self) -> "EthRpcClient":
+    async def __aenter__(self) -> EthRpcClient:
         self._session = aiohttp.ClientSession(timeout=self._timeout)
         return self
 
@@ -53,23 +54,27 @@ class EthRpcClient:
             await self._session.close()
             self._session = None
 
-    async def _call(self, method: str, params: list) -> Any:
+    async def _call(self, method: str, params: list[Any]) -> Any:
         if self._session is None:
             raise RuntimeError("Client not opened; use `async with EthRpcClient(...) as c:`")
         self._req_id += 1
         payload = {"jsonrpc": "2.0", "method": method, "params": params, "id": self._req_id}
-        async with self._session.post(self._url, data=json.dumps(payload),
-                                       headers={"Content-Type": "application/json"}) as resp:
+        async with self._session.post(
+            self._url,
+            data=json.dumps(payload),
+            headers={"Content-Type": "application/json"},
+        ) as resp:
             resp.raise_for_status()
             body = await resp.json()
         if "error" in body:
             raise JsonRpcError(f"{method} -> {body['error']}")
         return body.get("result")
 
-    async def get_block(self, block_number: int, full_txs: bool = True) -> dict:
-        """Fetch a single block by number. Returns the raw block dict."""
+    async def get_block(self, block_number: int, full_txs: bool = True) -> dict[str, Any] | None:
+        """Fetch a single block by number. Returns the raw block dict, or None if missing."""
         hex_num = hex(block_number)
-        return await self._call("eth_getBlockByNumber", [hex_num, full_txs])
+        result: dict[str, Any] | None = await self._call("eth_getBlockByNumber", [hex_num, full_txs])
+        return result
 
     async def stream_transactions(
         self,
@@ -94,7 +99,7 @@ class EthRpcClient:
 
     @staticmethod
     def _map_tx_to_model(
-        tx: dict, block_number: int, timestamp: int
+        tx: dict[str, Any], block_number: int, timestamp: int
     ) -> KeyedNonceTransaction:
         """Map a JSON-RPC transaction object into our internal model.
 

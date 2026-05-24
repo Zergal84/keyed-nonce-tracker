@@ -15,7 +15,10 @@ import plotly.express as px
 import streamlit as st
 
 from .analyzer import aggregate, bucket_by_block
-from .data_models import MAX_NONCE_SEQ, NONCE_MANAGER_BYTES_PER_SLOT  # noqa: F401 (used in help text)
+from .data_models import (  # noqa: F401 (used in help text)
+    MAX_NONCE_SEQ,
+    NONCE_MANAGER_BYTES_PER_SLOT,
+)
 from .simulator import KeyedNonceSimulator
 
 

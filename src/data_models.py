@@ -10,8 +10,7 @@ Constants per EIP-8250 draft:
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
 
 KEYED_NONCE_FIRST_USE_GAS = 20000
 MAX_NONCE_SEQ = (1 << 64) - 1
