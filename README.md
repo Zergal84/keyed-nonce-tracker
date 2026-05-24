@@ -88,7 +88,7 @@ CI runs the full suite plus ruff and mypy on Python 3.10, 3.11, 3.12, and 3.13 a
 | 3 | Historical backfill from Glamsterdam genesis into Parquet | planned |
 | 4 | Hosted dashboard, Grafana panel, Dune query template | planned |
 
-See [CHANGELOG.md](CHANGELOG.md) for the v0.1.0 release notes, and [docs/ESP_PROPOSAL.md](docs/ESP_PROPOSAL.md) for the EF ESP Glamsterdam Round application.
+See [CHANGELOG.md](CHANGELOG.md) for the v0.1.0 release notes.
 
 ## Contributing
 
